@@ -66,19 +66,17 @@ function buildPrompt(
 
 ## 出力フォーマット（このまま出力すること。前後の余計な説明は不要）
 
-Vintage Daily — ${dateJP}
+${dateJP}
 
 ━━━━━━━━━━━━━━━━━━
-【カルチャー洞察】
-*[タイトル]*
+*[カルチャー洞察のタイトル]*
 
 [本文 200〜300字程度]
 具体的な年代・背景・人物・エピソードを含める。
 
 参考ベース：[Heddels / Lightning / 2nd 等から該当するもの]
 ━━━━━━━━━━━━━━━━━━
-【服の知識】
-*[タイトル]*
+*[服の知識のタイトル]*
 
 [本文 200〜300字程度]
 実際の見分け方・数値・具体的な特徴を含める。
@@ -93,8 +91,9 @@ function extractTitles(message: string): {
   cultureTitle: string;
   clothingTitle: string;
 } {
-  const cultureMatch = message.match(/【カルチャー洞察】\s*\n\*(.+?)\*/);
-  const clothingMatch = message.match(/【服の知識】\s*\n\*(.+?)\*/);
+  const sections = message.split("━━━━━━━━━━━━━━━━━━");
+  const cultureMatch = sections[1]?.match(/\*(.+?)\*/);
+  const clothingMatch = sections[2]?.match(/\*(.+?)\*/);
 
   return {
     cultureTitle: cultureMatch?.[1]?.trim() ?? "unknown",
